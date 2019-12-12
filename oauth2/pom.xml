@@ -10,11 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <packaging>pom</packaging>
-    <artifactId>example-spring-security-oauth2</artifactId>
+    <artifactId>example-spring-security-oauth2-parent</artifactId>
     <name>Example :: Spring :: Security :: Oauth2 :: Parent</name>
 
 
     <modules>
+        <module>base</module>
         <module>authorization-server</module>
         <module>resource-server</module>
     </modules>

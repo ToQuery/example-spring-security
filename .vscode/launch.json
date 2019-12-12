@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - ExampleSpringSecurityOauth2AuthorizationResourceServerApplication",
+            "request": "launch",
+            "mainClass": "io.github.toquery.example.spring.security.oauth2.authorization.ExampleSpringSecurityOauth2AuthorizationResourceServerApplication",
+            "projectName": "example-spring-security-oauth2-authorization-resource-server"
+        }
+    ]
+}
