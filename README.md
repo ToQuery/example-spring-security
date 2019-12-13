@@ -17,7 +17,9 @@ curl -X POST --user clientapp:123456 http://localhost:8080/oauth/token \
         -H "content-type: application/x-www-form-urlencoded" \
         -d "code=DwcTAv&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Flogin&scope=read_profile_info"
 ```
+
 响应数据:
+
 ```json
 {
   "access_token": "ceb937a3-82e6-4708-8348-f0cfe5210ada",
@@ -27,7 +29,9 @@ curl -X POST --user clientapp:123456 http://localhost:8080/oauth/token \
   "scope": "read_profile_info"
 }
 ```
+
 替换新的 access_token 后执行请求(第二个)，获取到登录用户数据，见文件 [oauth2/base/base/src/test/resources/user-me.json](oauth2/base/base/src/test/resources/user-me.json)
+
 ```shell script
 curl -X GET http://localhost:8080/api/users/me -H "Authorization: Bearer ceb937a3-82e6-4708-8348-f0cfe5210ada"
 ```
