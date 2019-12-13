@@ -2,6 +2,16 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Spring Boot-ExampleSpringSecurityOauth2BaseApplication<example-spring-security-oauth2-base>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "io.github.toquery.example.spring.security.oauth2.base.ExampleSpringSecurityOauth2BaseApplication",
+            "projectName": "example-spring-security-oauth2-base",
+            "args": ""
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-ExampleSpringSecurityOauth2AuthorizationServerApplication<example-spring-security-oauth2-authorization-server>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
