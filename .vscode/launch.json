@@ -2,10 +2,23 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - ExampleSpringSecurityOauth2AuthorizationResourceServerApplication",
+            "name": "Spring Boot-ExampleSpringSecurityOauth2AuthorizationServerApplication<example-spring-security-oauth2-authorization-server>",
             "request": "launch",
-            "mainClass": "io.github.toquery.example.spring.security.oauth2.authorization.ExampleSpringSecurityOauth2AuthorizationResourceServerApplication",
-            "projectName": "example-spring-security-oauth2-authorization-resource-server"
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "io.github.toquery.example.spring.security.oauth2.authorization.ExampleSpringSecurityOauth2AuthorizationServerApplication",
+            "projectName": "example-spring-security-oauth2-authorization-server",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ExampleSpringSecurityOauth2ResourceServerApplication<example-spring-security-oauth2-resource-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "io.github.toquery.example.spring.security.oauth2.resource.ExampleSpringSecurityOauth2ResourceServerApplication",
+            "projectName": "example-spring-security-oauth2-resource-server",
+            "args": ""
         }
     ]
 }

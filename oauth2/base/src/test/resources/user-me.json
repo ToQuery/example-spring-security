@@ -1,0 +1,104 @@
+{
+  "httpServlets": {
+    "response.headers": {},
+    "requests": {
+      "headers": {
+        "authorization": "Bearer b66cceea-ab1e-4d84-82a6-f5f8de42a08d",
+        "host": "localhost:8080",
+        "connection": "Keep-Alive",
+        "accept-encoding": "gzip,deflate",
+        "user-agent": "Apache-HttpClient/4.5.10 (Java/11.0.4)"
+      },
+      "method": "GET",
+      "uri": "/api/users/me",
+      "url": "http://localhost:8080/api/users/me"
+    }
+  },
+  "authentication": {
+    "authorities": [
+      {
+        "authority": "ROLE_USER"
+      }
+    ],
+    "details": {
+      "remoteAddress": "127.0.0.1",
+      "sessionId": null,
+      "tokenValue": "b66cceea-ab1e-4d84-82a6-f5f8de42a08d",
+      "tokenType": "Bearer",
+      "decodedDetails": null
+    },
+    "authenticated": true,
+    "userAuthentication": {
+      "authorities": [
+        {
+          "authority": "ROLE_USER"
+        }
+      ],
+      "details": {
+        "remoteAddress": "0:0:0:0:0:0:0:1",
+        "sessionId": "E687869CF33A5DAAADC04A2827A464EE"
+      },
+      "authenticated": true,
+      "principal": {
+        "password": null,
+        "username": "admin",
+        "authorities": [
+          {
+            "authority": "ROLE_USER"
+          }
+        ],
+        "accountNonExpired": true,
+        "accountNonLocked": true,
+        "credentialsNonExpired": true,
+        "enabled": true
+      },
+      "credentials": null,
+      "name": "admin"
+    },
+    "principal": {
+      "password": null,
+      "username": "admin",
+      "authorities": [
+        {
+          "authority": "ROLE_USER"
+        }
+      ],
+      "accountNonExpired": true,
+      "accountNonLocked": true,
+      "credentialsNonExpired": true,
+      "enabled": true
+    },
+    "credentials": "",
+    "clientOnly": false,
+    "oauth2Request": {
+      "clientId": "clientapp",
+      "scope": [
+        "read_profile_info"
+      ],
+      "requestParameters": {
+        "code": "crjzBO",
+        "grant_type": "authorization_code",
+        "scope": "read_profile_info",
+        "response_type": "code",
+        "redirect_uri": "http://localhost:8081/login",
+        "client_id": "clientapp"
+      },
+      "resourceIds": [],
+      "authorities": [
+        {
+          "authority": "READ_ONLY_CLIENT"
+        }
+      ],
+      "approved": true,
+      "refresh": false,
+      "redirectUri": "http://localhost:8081/login",
+      "responseTypes": [
+        "code"
+      ],
+      "extensions": {},
+      "grantType": "authorization_code",
+      "refreshTokenRequest": null
+    },
+    "name": "admin"
+  }
+}

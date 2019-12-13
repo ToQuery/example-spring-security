@@ -31,7 +31,8 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token")
                 .authorities("READ_ONLY_CLIENT")
                 .scopes("read_profile_info")
-                .resourceIds("gateway")
+                // 需要与 OAuth2ResourceServer#configure 的 resourceId 配合
+                // .resourceIds("example-spring-security-oauth2-base")
                 // 自动授权，无需人工手动点击 approve
                 // .autoApprove(true)
                 .redirectUris("http://localhost:8081/login")

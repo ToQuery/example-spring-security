@@ -3,10 +3,10 @@ Content-Type: application/x-www-form-urlencoded
 Authorization: Basic Y2xpZW50YXBwOjEyMzQ1Ng==
 
 
-grant_type=authorization_code&code=B7ALYO&redirect_uri=http://localhost:8081/login
+grant_type=authorization_code&code=crjzBO&redirect_uri=http://localhost:8081/login
 ###
 
 GET http://localhost:8080/api/users/me
-authorization: Bearer f661706e-2c80-4b57-b15e-112037803067
+Authorization: Bearer b66cceea-ab1e-4d84-82a6-f5f8de42a08d
 
 ###
