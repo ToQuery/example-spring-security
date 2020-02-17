@@ -36,6 +36,7 @@ public class OAuth2ReactiveAuthorizationServerSecurityConfig {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    // 这里应该用于客户端
     @Bean
     ReactiveClientRegistrationRepository clientRegistrations() {
 //                .resourceIds("example-spring-security-oauth2-resource-server")

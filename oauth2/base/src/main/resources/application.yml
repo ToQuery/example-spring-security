@@ -4,6 +4,7 @@ spring:
     active: dev
 
 
+
 # actuator配置
 management:
   endpoints:
@@ -26,3 +27,9 @@ logging:
     org.springframework.security.oauth2: DEBUG
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: debug
     org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: debug
+
+
+#security:
+#  oauth2:
+#    client:
+#      id:

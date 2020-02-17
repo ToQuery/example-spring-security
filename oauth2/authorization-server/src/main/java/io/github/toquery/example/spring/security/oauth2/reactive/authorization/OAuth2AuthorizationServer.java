@@ -26,7 +26,7 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("app-1")
+                .withClient("clientapp")
                 .secret(passwordEncoder.encode("123456"))
                 .authorizedGrantTypes("password","implicit", "authorization_code", "refresh_token", "client_credentials")
                 .authorities("uaa.resource")

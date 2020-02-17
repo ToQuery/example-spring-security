@@ -13,6 +13,10 @@
     <name>Example :: Spring :: Security :: Oauth2 :: Reactive ::Parent</name>
     <artifactId>example-spring-security-oauth2-reactive-parent</artifactId>
 
+    <modules>
+        <module>authorization-server</module>
+        <module>resource-server</module>
+    </modules>
 
 
 </project>
