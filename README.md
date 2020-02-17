@@ -114,7 +114,7 @@ This module contains support for testing with Spring Security.
 ```shell script
 curl -X POST --user clientapp:123456 http://localhost:8080/oauth/token \
         -H "content-type: application/x-www-form-urlencoded" \
-        -d "code=DwcTAv&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Flogin&scope=read_profile_info"
+        -d "code=u028mn&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Flogin&scope=read_profile_info"
 ```
 
 响应数据:
