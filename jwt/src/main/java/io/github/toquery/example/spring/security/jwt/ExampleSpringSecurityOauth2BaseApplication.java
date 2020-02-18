@@ -1,4 +1,4 @@
-package io.github.toquery.example.spring.security.oauth2.base;
+package io.github.toquery.example.spring.security.jwt;
 
 
 import org.springframework.boot.SpringApplication;

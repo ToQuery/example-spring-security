@@ -1,4 +1,4 @@
-package io.github.toquery.example.spring.security.oauth2.base.rest;
+package io.github.toquery.example.spring.security.jwt.rest;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
