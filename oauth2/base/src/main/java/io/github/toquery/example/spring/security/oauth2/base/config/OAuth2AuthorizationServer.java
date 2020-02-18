@@ -28,7 +28,7 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient("clientapp")
                 .secret(passwordEncoder.encode("123456"))
-                .authorizedGrantTypes("password","implicit", "authorization_code", "refresh_token", "client_credentials")
+                .authorizedGrantTypes("password", "implicit", "authorization_code", "refresh_token", "client_credentials")
                 .authorities("READ_ONLY_CLIENT")
                 .scopes("read_profile_info")
                 // 需要与 OAuth2ResourceServer#configure 的 resourceId 配合

@@ -4,36 +4,48 @@
 # 1.1. 通过浏览器登录获取 code
 # 访问：http://localhost:8080/oauth/authorize?client_id=clientapp&response_type=code&scope=read_profile_info
 # 1.2. 根据获取的 code 换取 access_token
-POST http://localhost:8080/oauth/token
-Authorization: Basic clientapp 123456
+POST {{host}}/oauth/token
+Authorization: Basic {{client_id}} {{client_secret}}
 # Authorization: Basic Y2xpZW50YXBwOjEyMzQ1Ng==
 Content-Type: application/x-www-form-urlencoded
 
-code=7TIlW6&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Flogin&scope=read_profile_info
+code=H5ko08&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Flogin&scope=read_profile_info
 
+> {%
+    client.global.set("access_token", response.body.access_token)
+    client.global.set("refresh_token", response.body.refresh_token)
+%}
 
 ### 2. implicit 方式获取 access_token
 
-# http://localhost:8080/oauth/authorize?response_type=token&client_id=demoApp&redirect_uri=https://baidu.com
+# 浏览器访问 http://localhost:8080/oauth/authorize?response_type=token&client_id=demoApp&redirect_uri=https://baidu.com
 
 ### 3. password 方式获取 access_token
 
-POST http://localhost:8080/oauth/token
-
+POST {{host}}/oauth/token
 Content-Type: application/x-www-form-urlencoded
 
-username=admin&password=123456&grant_type=password&scope=read_profile_info&client_id=clientapp&client_secret=123456
+username={{username}}&password={{password}}&grant_type=password&scope=read_profile_info&client_id={{client_id}}&client_secret={{client_secret}}
 
+> {%
+    client.global.set("access_token", response.body.access_token)
+%}
 
 ### 4. client_credentials 方式获取 access_token
-POST http://localhost:8090/oauth/token
+
+POST {{host}}/oauth/token
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=client_credentials&client_id=clientapp&client_secret=123456
+grant_type=client_credentials&client_id={{client_id}}&client_secret={{client_secret}}
 
-###
 
-GET http://localhost:8080/api/users/me
-Authorization: Bearer 0e0ac892-ba1e-4878-bb47-59348f51fa7d
+> {%
+    client.global.set("access_token", response.body.access_token)
+%}
+
+### 通过 access_token 获取用户信息
+
+GET {{host}}/api/users/me
+Authorization: Bearer {{access_token}}
 
 ###

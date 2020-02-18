@@ -2,15 +2,31 @@
 
 `Authorization Server` `Resource Server` 同时位于一个服务内。
 
+- Client : 第三方应用，它获得RO的授权后便可以去访问RO的资源。
+- Resource Owner : 资源所有者，对资源具有授权能力的人。
+- Resource Server : 资源服务器，它存储资源，并处理对资源的访问请求。
+- Authorization Server : 授权服务器，它认证RO的身份，为RO提供授权审批流程，并最终颁发授权令牌(Access Token)。
+
 #### User Account and Authentication (UAA) Server 
 
-#### 授权类型 grant_types
+#### 授权方式 grant_types
+
+OAuth2.0为了支持这些不同类型的第三方应用，提出了下面四种授权类型：
 
 - authorization_code
 - implicit
 - password
 - client_credentials
 
+| 流程     | Response Type(第一次请求) | Grant Type(第二次请求) | 可带Refresh Token | **说明**                                                 |
+| -------- | ------------------------- | ---------------------- | ----------------- | -------------------------------------------------------- |
+| 授权码   | code                      | authorization_code     | 是                | 常规流程                                                 |
+| Implicit | token                     | -                      | 否                | 适用于纯JS程序                                           |
+| 用户认证 | -                         | password               | 是                | 客户端高度可信，且授权码流程不方便实施                   |
+| 客户端   | -                         | client_credentials     | 否                | 客户端高度可信，拥有被操作资源(自用型)，或操作非敏感资源 |
+
+
+#### 
 
 #### 流程验证
 未登录访问 [http://localhost:8080/api/users/me](http://localhost:8080/api/users/me) 获取用户信息，提示游客用户 `anonymousUser`
