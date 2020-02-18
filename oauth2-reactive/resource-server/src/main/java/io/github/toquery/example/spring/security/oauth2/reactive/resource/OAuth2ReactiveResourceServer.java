@@ -1,4 +1,4 @@
-package io.github.toquery.example.spring.security.oauth2.resource;
+package io.github.toquery.example.spring.security.oauth2.reactive.resource;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 
 @Configuration
 @EnableResourceServer
-public class OAuth2ResourceServer  extends ResourceServerConfigurerAdapter {
+public class OAuth2ReactiveResourceServer extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
