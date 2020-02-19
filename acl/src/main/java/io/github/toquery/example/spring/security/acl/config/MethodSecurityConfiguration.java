@@ -1,10 +1,11 @@
-package io.github.toquery.example.spring.security.jwt.config;
+package io.github.toquery.example.spring.security.acl.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.ehcache.EhCacheFactoryBean;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -15,6 +16,7 @@ import org.springframework.security.acls.domain.AclAuthorizationStrategyImpl;
 import org.springframework.security.acls.domain.ConsoleAuditLogger;
 import org.springframework.security.acls.domain.DefaultPermissionGrantingStrategy;
 import org.springframework.security.acls.domain.EhCacheBasedAclCache;
+import org.springframework.security.acls.domain.SpringCacheBasedAclCache;
 import org.springframework.security.acls.jdbc.BasicLookupStrategy;
 import org.springframework.security.acls.jdbc.JdbcMutableAclService;
 import org.springframework.security.acls.jdbc.LookupStrategy;
@@ -29,8 +31,16 @@ import javax.sql.DataSource;
 
 @Configuration
 // @EnableCaching
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
+
+    /*@Autowired
+    private MethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler;
+
+    @Override
+    protected MethodSecurityExpressionHandler createExpressionHandler() {
+        return defaultMethodSecurityExpressionHandler;
+    }*/
 
     // method security config wired in aclPermissionEvaluator
     @Override
@@ -44,6 +54,7 @@ public class MethodSecurityConfiguration extends GlobalMethodSecurityConfigurati
 
     /**
      * AclPermissionEvaluator needs a aclService
+     *
      * @return
      */
     @Bean
@@ -56,11 +67,12 @@ public class MethodSecurityConfiguration extends GlobalMethodSecurityConfigurati
      * Define JDBC ACL service
      * These 2 simple SQL queries are MySQL specific, so if need supporting multiple databases,
      * you might want to put these in configuration, not in code.
+     *
      * @return
      */
     @Bean
     public JdbcMutableAclService aclService() {
-        JdbcMutableAclService service = new JdbcMutableAclService(dataSource(), lookupStrategy(), aclCache());
+        JdbcMutableAclService service = new JdbcMutableAclService(dataSource, lookupStrategy(), aclCache());
         // Those two line for MySQL only
         service.setClassIdentityQuery("SELECT @@IDENTITY");
         service.setSidIdentityQuery("SELECT @@IDENTITY");
@@ -70,27 +82,37 @@ public class MethodSecurityConfiguration extends GlobalMethodSecurityConfigurati
     // lookup strategy
     @Bean
     public LookupStrategy lookupStrategy() {
-        return new BasicLookupStrategy(dataSource(), aclCache(), aclAuthorizationStrategy(), permissionGrantingStrategy());
+        return new BasicLookupStrategy(dataSource, aclCache(), aclAuthorizationStrategy(), permissionGrantingStrategy());
     }
 
+    @Autowired
+    private CacheManager cacheManager;
 
-    // cache
     @Bean
-    public AclCache aclCache() {
-        final EhCacheFactoryBean factoryBean = new EhCacheFactoryBean();
-        final EhCacheManagerFactoryBean cacheManager = new EhCacheManagerFactoryBean();
-        cacheManager.setAcceptExisting(true);
-        cacheManager.setCacheManagerName("abc");
-        cacheManager.afterPropertiesSet();
-
-        // factoryBean.setName("aclCache");
-        factoryBean.setCacheManager(cacheManager.getObject());
-        // factoryBean.setMaxBytesLocalHeap("16M");
-        // factoryBean.setMaxEntriesLocalHeap(0L);
-        factoryBean.afterPropertiesSet();
-        return new EhCacheBasedAclCache(factoryBean.getObject(), permissionGrantingStrategy(), aclAuthorizationStrategy());
-
+    public EhCacheFactoryBean aclEhCacheFactoryBean() {
+        EhCacheFactoryBean ehCacheFactoryBean = new EhCacheFactoryBean();
+        ehCacheFactoryBean.setCacheManager(aclCacheManager().getObject());
+        ehCacheFactoryBean.setCacheName("aclCache");
+        return ehCacheFactoryBean;
     }
+
+    @Bean
+    public EhCacheManagerFactoryBean aclCacheManager() {
+        return new EhCacheManagerFactoryBean();
+    }
+
+    @Bean(name = {"defaultAclCache", "aclCache"})
+    public AclCache aclCache() {
+        Cache cache = cacheManager.getCache("acl_cache");
+        return new EhCacheBasedAclCache(aclEhCacheFactoryBean().getObject(), permissionGrantingStrategy(), aclAuthorizationStrategy());
+    }
+
+    // Depending on your configuration, you may not even need this
+//    @Bean
+//    public JCacheCacheManager springCacheManager(javax.cache.CacheManager cacheManager) {
+//        return new JCacheCacheManager(cacheManager);
+//    }
+
 
     // which deals with access administrative methods
     @Bean
@@ -104,10 +126,13 @@ public class MethodSecurityConfiguration extends GlobalMethodSecurityConfigurati
         return new DefaultPermissionGrantingStrategy(new ConsoleAuditLogger());
     }
 
+    @Autowired
+    private DataSource dataSource;
+
     // data source
-    @Bean
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
-    }
+//    @Bean
+//    @ConfigurationProperties(prefix = "spring.datasource")
+//    public DataSource dataSource() {
+//        return DataSourceBuilder.create().build();
+//    }
 }

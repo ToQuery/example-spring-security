@@ -1,6 +1,20 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/example_spring_security_acl?createDatabaseIfNotExist=true
-    password: 123456
-    username: admin
-    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+    initialization-mode: ALWAYS
+    schema: classpath:acl-schema.sql
+    data: classpath:acl-data.sql
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      path: /myconsole
+      enabled: true
+
