@@ -9,7 +9,7 @@ Authorization: Basic {{client_id}} {{client_secret}}
 # Authorization: Basic Y2xpZW50YXBwOjEyMzQ1Ng==
 Content-Type: application/x-www-form-urlencoded
 
-code=H5ko08&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Flogin&scope=read_profile_info
+code=i4ZqKx&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Flogin&scope=read_profile_info
 
 > {%
     client.global.set("access_token", response.body.access_token)

@@ -215,7 +215,7 @@ The device authorization flow illustrated in Figure 3 includes the
    public
       无法维护其证书机密性的客户(e.g., 在资源所有者使用的设备上执行的客户端，例如已安装的本机应用程序或基于Web浏览器的应用程序), 在资源所有者使用的设备上执行的客户端，例如已安装的本机应用程序或基于Web浏览器的应用程序
 
-   
+
    客户端类型的指定基于授权服务器对安全认证的定义及其可接受的客户端凭据公开级别。授权服务器不应对客户端类型做任何假设
 
    客户端可以实现为一组分布式组件，每个组件具有不同的客户端类型和安全上下文(e.g., 具有基于服务器的机密组件和基于公共浏览器的组件的分布式客户端)。
@@ -229,7 +229,7 @@ The device authorization flow illustrated in Figure 3 includes the
    user-agent-based application
       基于用户代理的应用程序是一个公共客户端，其中客户端代码是从Web服务器下载的，并在资源所有者使用的设备上的用户代理（e.g., Web浏览器）中执行。协议数据和凭据易于资源所有者访问（并且经常可见）。
       由于此类应用程序驻留在用户代理中，因此它们可以在请求授权时无缝使用用户代理功能。
-   
+
    native application
       本机应用程序是在资源所有者使用的设备上安装并执行的公共客户端。协议数据和凭据可供资源所有者访问。假定可以提取应用程序中包含的任何客户端身份验证凭据。另一方面，动态颁发的凭据（例如访问令牌或刷新令牌）可以收到可接受的保护级别。
       至少，应保护这些凭据不受可能与应用程序进行交互的敌对服务器的攻击。在某些平台上，可以保护这些凭据免受驻留在同一设备上的其他应用程序的攻击。
@@ -246,6 +246,29 @@ The device authorization flow illustrated in Figure 3 includes the
 
 #### User Account and Authentication (UAA) Server 
 
+| 项目                                       | 语言 |
+| ------------------------------------------ | ---- |
+| [keycloak](https://www.keycloak.org/)      | java |
+| [uaa](https://github.com/cloudfoundry/uaa) | java |
+| [hydra](https://github.com/ory/hydra)      | go   |
+
+
+
+#### OAuth2异构系统用户登录配置
+
+![](images/spring-boot-authentication-spring-security-architecture.png)
+
+spring-security-oauth2 authorization_code模式登录流程：
+
+1、#OAuth2AuthorizationRequestRedirectFilter 拦截授权请求：/oauth2/authorization/{registrationId},
+    如果匹配则创建#OAuth2AuthorizationRequest 对象(见#DefaultOAuth2AuthorizationRequestResolver)
+    紧接着sendRedirect(#OAuth2AuthorizationRequest)。此即为authorization_code模式第一步(获取code)
+2、#OAuth2LoginAuthenticationFilter 拦截OAuth2Provider发来的携带了code的callback请求：/login/oauth2/code/{registrationId}
+    如果匹配则从请求参数中提取code参数,然后执行认证(见#OAuth2LoginAuthenticationFilter.attemptAuthentication)：
+    2.1 标准OAuth2授权的code换 token：#OAuth2LoginAuthenticationProvider (如果scope中不包含'openid')
+    2.2 标准OIDC授权的code换token：#OidcAuthorizationCodeAuthenticationProvider (如果scope中包含'openid')
+        其中的code换token正是通过 OAuth2Provider.tokenUri 标识的请求来完成的
+        通过code拿到的JWT令牌需要通过 OAuth2Provider.jwkSetUri 获取到的jwks来进行校验
 
 #### 流程验证
 未登录访问 [http://localhost:8080/api/users/me](http://localhost:8080/api/users/me) 获取用户信息，提示游客用户 `anonymousUser`
@@ -275,3 +298,6 @@ curl -X POST --user clientapp:123456 http://localhost:8080/oauth/token \
 ```shell script
 curl -X GET http://localhost:8080/api/users/me -H "Authorization: Bearer ceb937a3-82e6-4708-8348-f0cfe5210ada"
 ```
+## 参考资料
+
+- https://github.com/spring-projects-experimental/spring-authorization-server
