@@ -39,4 +39,53 @@ MutableAclService是用来对Acl进行持久化的，其默认实现类是JdbcMu
 JdbcMutableAclService是继承自JdbcAclService的，所以我们可以同时通过JdbcMutableAclService对Acl进行读取和保存。
 如果我们希望自己来实现Acl信息的保存的话，我们也可以不使用该接口。
 
-### 数据库
+### 数据结构
+
+- acl_class
+
+| **字段名** | **类型** | **说明**           |
+| ---------- | -------- | ------------------ |
+| id         | number   | 主键               |
+| class      | varchar  | 对象类型的全限定名 |
+
+表acl_class是用来保存对象类型的，字段class中保存的是对应对象的全限定名。Acl需要使用它来区分不同的对象类型。
+
+- acl_sid
+
+| **字段名** | **类型** | **说明**        |
+| ---------- | -------- | --------------- |
+| id         | number   | 主键            |
+| sid        | varchar  | 字符串类型的sid |
+| principal  | boolean  | 是否用户        |
+
+表acl_sid是用来保存Sid的。对于Acl而言，有两种类型的Sid一种是基于用户的Sid，叫PrincipalSid，另一种是基于GrantedAuthority的Sid，叫GrantedAuthoritySid。acl_sid表的sid字段存放的是用户名或者是GrantedAuthority的字符串表示。prinpal是用来区分对应的Sid是用户还是GrantedAuthority的。正如在前文所描述的那样，Acl中对象的权限是用来授予给Sid的，Sid有用户和GrantedAuthority之分，所以我们的对象权限是可以用来授予给用户或GrantedAuthority的。
+
+- acl_object_identity
+
+| **字段名**         | **类型** | **描述**                                                     |
+| ------------------ | -------- | ------------------------------------------------------------ |
+| id                 | number   | 主键                                                         |
+| object_id_class    | number   | 关联acl_class，表示对象类型                                  |
+| object_id_identity | number   | 对象的主键，对于相同的class而言，其需要是唯一的。对象的主键默认需要是Long型，或者可以转换为Long型的对象，如Integer、Short等。 |
+| parent_object      | number   | 父对象的id，关联acl_object_identity                          |
+| owner_sid          | number   | 拥有者的sid，关联acl_sid                                     |
+| entries_inheriting | boolean  | 是否继承父对象的权限。打个比方，删除对象childObj需要有delete权限，用户A他没有childObj的delete权限，但是他有childObj的父对象parentObj的delete权限，当entries_inheriting为true时，用户A同样可以删除childObj。 |
+
+表acl_object_identity是用来存放需要进行访问控制的对象的信息的。其保存的信息有对象的拥有者、对象的类型、对象的主键、对象的父对象和是否继承父对象的权限。
+
+- acl_entry
+
+| **字段名**          | **类型** | **说明**                                                  |
+| ------------------- | -------- | --------------------------------------------------------- |
+| id                  | number   | 主键                                                      |
+| acl_object_identity | number   | 对应acl_object_identity的id                               |
+| ace_order           | number   | 所属Acl的权限顺序                                         |
+| sid                 | number   | 对应acl_sid的id                                           |
+| mask                | number   | 权限对应的掩码                                            |
+| granting            | boolean  | 是否授权                                                  |
+| audit_success       | boolean  | 暂未发现其作用，Acl中有一个更新其值的方法，但未见被调用。 |
+| audit_failure       | boolean  |                                                           |
+
+表acl_entry是用于存放具体的权限信息的，从表结构我们也可以看出来，其描述的就是某个主体（Sid）对某个对象（acl_object_identity）是否（granting）拥有某种权限（mask）。当同一对象acl_object_identity在acl_entry表中拥有多条记录时，就会使用ace_order来标记对应的顺序，其对应于往Acl中插入AccessControlEntry时的位置，在进行权限判断时也是依靠ace_order的顺序来进行的，ace_order越小的越先进行判断。ace是Access Control Entry的简称。
+
+> - https://www.baeldung.com/spring-security-acl

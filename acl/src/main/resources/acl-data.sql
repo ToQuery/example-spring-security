@@ -1,15 +1,15 @@
+INSERT INTO system_message(id,content) VALUES
+(1,'First Level Message'),
+(2,'Second Level Message'),
+(3,'Third Level Message');
+
 INSERT INTO acl_sid (id, principal, sid) VALUES
 (1, 1, 'manager'),
 (2, 1, 'hr'),
 (3, 0, 'ROLE_EDITOR');
 
 INSERT INTO acl_class (id, class) VALUES
-(1, 'org.baeldung.acl.persistence.entity.NoticeMessage');
-
-INSERT INTO system_message(id,content) VALUES
-(1,'First Level Message'),
-(2,'Second Level Message'),
-(3,'Third Level Message');
+(1, 'io.github.toquery.example.spring.security.acl.persistence.entity.NoticeMessage');
 
 INSERT INTO acl_object_identity (id, object_id_class, object_id_identity, parent_object, owner_sid, entries_inheriting) VALUES
 (1, 1, 1, NULL, 3, 0),

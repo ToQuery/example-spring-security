@@ -34,105 +34,11 @@ import javax.sql.DataSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
-    /*@Autowired
-    private MethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler;
+    @Autowired
+    MethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler;
 
     @Override
     protected MethodSecurityExpressionHandler createExpressionHandler() {
         return defaultMethodSecurityExpressionHandler;
-    }*/
-
-    // method security config wired in aclPermissionEvaluator
-    @Override
-    protected MethodSecurityExpressionHandler createExpressionHandler() {
-        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-        expressionHandler.setPermissionEvaluator(aclPermissionEvaluator());
-        return expressionHandler;
     }
-
-    // ======= ACL configurations =======
-
-    /**
-     * AclPermissionEvaluator needs a aclService
-     *
-     * @return
-     */
-    @Bean
-    public AclPermissionEvaluator aclPermissionEvaluator() {
-        AclPermissionEvaluator aclPermissionEvaluator = new AclPermissionEvaluator(aclService());
-        return aclPermissionEvaluator;
-    }
-
-    /**
-     * Define JDBC ACL service
-     * These 2 simple SQL queries are MySQL specific, so if need supporting multiple databases,
-     * you might want to put these in configuration, not in code.
-     *
-     * @return
-     */
-    @Bean
-    public JdbcMutableAclService aclService() {
-        JdbcMutableAclService service = new JdbcMutableAclService(dataSource, lookupStrategy(), aclCache());
-        // Those two line for MySQL only
-        service.setClassIdentityQuery("SELECT @@IDENTITY");
-        service.setSidIdentityQuery("SELECT @@IDENTITY");
-        return service;
-    }
-
-    // lookup strategy
-    @Bean
-    public LookupStrategy lookupStrategy() {
-        return new BasicLookupStrategy(dataSource, aclCache(), aclAuthorizationStrategy(), permissionGrantingStrategy());
-    }
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Bean
-    public EhCacheFactoryBean aclEhCacheFactoryBean() {
-        EhCacheFactoryBean ehCacheFactoryBean = new EhCacheFactoryBean();
-        ehCacheFactoryBean.setCacheManager(aclCacheManager().getObject());
-        ehCacheFactoryBean.setCacheName("aclCache");
-        return ehCacheFactoryBean;
-    }
-
-    @Bean
-    public EhCacheManagerFactoryBean aclCacheManager() {
-        return new EhCacheManagerFactoryBean();
-    }
-
-    @Bean(name = {"defaultAclCache", "aclCache"})
-    public AclCache aclCache() {
-        Cache cache = cacheManager.getCache("acl_cache");
-        return new EhCacheBasedAclCache(aclEhCacheFactoryBean().getObject(), permissionGrantingStrategy(), aclAuthorizationStrategy());
-    }
-
-    // Depending on your configuration, you may not even need this
-//    @Bean
-//    public JCacheCacheManager springCacheManager(javax.cache.CacheManager cacheManager) {
-//        return new JCacheCacheManager(cacheManager);
-//    }
-
-
-    // which deals with access administrative methods
-    @Bean
-    public AclAuthorizationStrategy aclAuthorizationStrategy() {
-        return new AclAuthorizationStrategyImpl(new SimpleGrantedAuthority("ADMIN"));
-    }
-
-    // this allows us to actually customize the decision to grant a permission (or not) based on the ACL entry
-    @Bean
-    public PermissionGrantingStrategy permissionGrantingStrategy() {
-        return new DefaultPermissionGrantingStrategy(new ConsoleAuditLogger());
-    }
-
-    @Autowired
-    private DataSource dataSource;
-
-    // data source
-//    @Bean
-//    @ConfigurationProperties(prefix = "spring.datasource")
-//    public DataSource dataSource() {
-//        return DataSourceBuilder.create().build();
-//    }
 }
