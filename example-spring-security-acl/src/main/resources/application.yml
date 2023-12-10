@@ -1,0 +1,23 @@
+
+spring:
+  profiles:
+    active: dev
+
+  docker:
+    compose:
+      enabled: true
+
+  sql:
+    init:
+      #      schema-locations:
+      #        - classpath*:database/schema.sql
+      data-locations:
+        - classpath*:database/data.sql
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.format_sql: true
+

@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres.example-spring-security.orb.local:5432/example_spring_security # _acl
+    username: postgres
+    password: postgres
+
+  jpa:
+    properties:
+      hibernate.format_sql: true
+
+
